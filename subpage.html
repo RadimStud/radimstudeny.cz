@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Page</title>
+    <style>
+        .button-container {
+            position: fixed;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .button-container button {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .yellow-button {
+            background-color: #FFD700;
+            color: black;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .yellow-button:hover {
+            background-color: #FFC300;
+        }
+
+        .result-box {
+            width: 100%;
+            height: 100px;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+    </style>
+    <script>
+        function fetchTestUsers() {
+            fetch('get_test_users.php')
+                .then(response => response.json())
+                .then(data => {
+                    const resultBox = document.querySelector('#result-box');
+                    resultBox.value = JSON.stringify(data, null, 2);
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                    document.querySelector('#result-box').value = 'Chyba při načítání dat.';
+                });
+        }
+
+        function runCustomPHP() {
+            fetch('subpage.php')
+                .then(response => response.text())
+                .then(data => {
+                    const textarea = document.querySelector('textarea');
+                    textarea.textContent = data;
+                })
+                .catch(error => {
+                    console.error('Error running custom PHP script:', error);
+                    document.querySelector('textarea').textContent = 'Chyba při spuštění skriptu.';
+                });
+        }
+
+        function redirectToWebsite() {
+            window.location.href = 'https://www.radimstudeny.cz';
+        }
+    </script>
+</head>
+<body>
+    <h1>Test</h1>
+    <textarea rows="10" cols="50" placeholder="Sem napište svůj text..."></textarea>
+    <textarea id="result-box" class="result-box" placeholder="Zde se zobrazí výsledky ze skriptu get_test_users.php..."></textarea>
+    
+    <div class="button-container">
+        <button onclick="fetchTestUsers()">Načíst uživatele</button>
+        <button class="yellow-button" onclick="runCustomPHP()">Spustit PHP skript</button>
+        <button class="yellow-button" onclick="redirectToWebsite()">Odkaz na radimstudeny.cz</button>
+    </div>
+</body>
+</html>
